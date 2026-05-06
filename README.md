@@ -6,7 +6,7 @@ This is the lightest of the four problems. Ship it fast and ship it deployed.
 
 An event registration system.
 
-- Stack: **Next.js**, **Nest.js**, or **Go**.
+- Stack: **Next.js** or **Nest.js**, or **Go**. Choose from this not all.
 - One repo. User pages, admin pages, and API in the same project.
 - Automated tests. What you test is your call. Pick what would matter if this were a real event with real people.
 
