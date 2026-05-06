@@ -8,7 +8,7 @@ An event registration system.
 
 - Stack: **Next.js** or **Nest.js**, or **Go**. Choose from this not all.
 - One repo. User pages, admin pages, and API in the same project.
-- Automated tests. What you test is your call. Pick what would matter if this were a real event with real people.
+- Tests. Pick what would matter if this were a real event with real people. Can be any kind of test written by code.
 
 User can:
 - Submit a registration form with name, email, phone, and any other fields a real event would ask for.
