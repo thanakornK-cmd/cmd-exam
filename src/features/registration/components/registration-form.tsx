@@ -6,6 +6,9 @@ import { useRouter } from "next/navigation";
 import { FileUpload } from "@/components/file-upload";
 import { FormField } from "@/components/form-field";
 
+const DOCUMENT_ACCEPT = ".pdf,.png,.jpg,.jpeg,.doc,.docx";
+const DOCUMENT_HINT = "Supported file types: PDF, PNG, JPG, JPEG, DOC, DOCX. You can upload multiple files.";
+
 type Props = {
   mode?: "create" | "edit";
   initialValues?: Partial<{
@@ -55,7 +58,15 @@ export function RegistrationForm({ mode = "create", initialValues = {} }: Props)
         <FormField name="phone" label="Phone" defaultValue={initialValues.phone} required />
       </div>
       {mode === "create" ? <FormField name="password" label="Password" type="password" required /> : null}
-      {mode === "create" ? <FileUpload name="documents[]" label="Supporting documents" multiple /> : null}
+      {mode === "create" ? (
+        <FileUpload
+          name="documents[]"
+          label="Upload Documents"
+          multiple
+          accept={DOCUMENT_ACCEPT}
+          hint={DOCUMENT_HINT}
+        />
+      ) : null}
       {error ? <p className="muted">{error}</p> : null}
       <div className="actions">
         <button className="button button--primary" type="submit" disabled={submitting}>

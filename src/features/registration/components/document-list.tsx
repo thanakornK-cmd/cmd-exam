@@ -3,6 +3,9 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
+const DOCUMENT_ACCEPT = ".pdf,.png,.jpg,.jpeg,.doc,.docx";
+const DOCUMENT_HINT = "Supported file types: PDF, PNG, JPG, JPEG, DOC, DOCX. You can upload multiple files.";
+
 type DocumentItem = {
   id: string;
   original_filename: string;
@@ -57,7 +60,7 @@ export function DocumentList({ documents }: { documents: DocumentItem[] }) {
       </div>
       <ul className="list">
         {documents.length === 0 ? (
-          <li className="empty">No supporting documents uploaded yet.</li>
+          <li className="empty">No documents uploaded yet.</li>
         ) : (
           documents.map((document) => (
             <li key={document.id} className="card">
@@ -77,6 +80,7 @@ export function DocumentList({ documents }: { documents: DocumentItem[] }) {
                   <input
                     type="file"
                     hidden
+                    accept={DOCUMENT_ACCEPT}
                     onChange={(event) => {
                       const file = event.target.files?.[0];
                       if (file) {
@@ -91,7 +95,11 @@ export function DocumentList({ documents }: { documents: DocumentItem[] }) {
         )}
       </ul>
       <form onSubmit={addNew} className="stack">
-        <input type="file" name="documents[]" multiple />
+        <label className="field">
+          <span>Upload Documents</span>
+          <input type="file" name="documents[]" multiple accept={DOCUMENT_ACCEPT} />
+        </label>
+        <p className="muted">{DOCUMENT_HINT}</p>
         <button className="button button--primary" type="submit" disabled={uploading}>
           {uploading ? "Uploading..." : "Add documents"}
         </button>
