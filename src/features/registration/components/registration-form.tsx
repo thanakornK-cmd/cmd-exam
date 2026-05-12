@@ -12,12 +12,6 @@ type Props = {
     full_name: string;
     email: string;
     phone: string;
-    organization: string;
-    job_title: string;
-    dietary_restrictions: string;
-    emergency_contact_name: string;
-    emergency_contact_phone: string;
-    notes: string;
   }>;
 };
 
@@ -59,25 +53,7 @@ export function RegistrationForm({ mode = "create", initialValues = {} }: Props)
         <FormField name="full_name" label="Full name" defaultValue={initialValues.full_name} required />
         <FormField name="email" label="Email" type="email" defaultValue={initialValues.email} required />
         <FormField name="phone" label="Phone" defaultValue={initialValues.phone} required />
-        <FormField name="organization" label="Organization" defaultValue={initialValues.organization} />
-        <FormField name="job_title" label="Job title" defaultValue={initialValues.job_title} />
-        <FormField
-          name="dietary_restrictions"
-          label="Dietary restrictions"
-          defaultValue={initialValues.dietary_restrictions}
-        />
-        <FormField
-          name="emergency_contact_name"
-          label="Emergency contact name"
-          defaultValue={initialValues.emergency_contact_name}
-        />
-        <FormField
-          name="emergency_contact_phone"
-          label="Emergency contact phone"
-          defaultValue={initialValues.emergency_contact_phone}
-        />
       </div>
-      <FormField name="notes" label="Notes" defaultValue={initialValues.notes} multiline />
       {mode === "create" ? <FormField name="password" label="Password" type="password" required /> : null}
       {mode === "create" ? <FileUpload name="documents[]" label="Supporting documents" multiple /> : null}
       {error ? <p className="muted">{error}</p> : null}

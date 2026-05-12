@@ -23,12 +23,6 @@ type RegistrationInput = Partial<
     | "full_name"
     | "email"
     | "phone"
-    | "organization"
-    | "job_title"
-    | "dietary_restrictions"
-    | "emergency_contact_name"
-    | "emergency_contact_phone"
-    | "notes"
   >
 > & {
   password?: string;
@@ -306,24 +300,6 @@ function applyRegistrationPatch(registration: RegistrationRecord, input: Registr
   if (input.phone) {
     registration.phone = input.phone;
   }
-  if (input.organization !== undefined) {
-    registration.organization = input.organization;
-  }
-  if (input.job_title !== undefined) {
-    registration.job_title = input.job_title;
-  }
-  if (input.dietary_restrictions !== undefined) {
-    registration.dietary_restrictions = input.dietary_restrictions;
-  }
-  if (input.emergency_contact_name !== undefined) {
-    registration.emergency_contact_name = input.emergency_contact_name;
-  }
-  if (input.emergency_contact_phone !== undefined) {
-    registration.emergency_contact_phone = input.emergency_contact_phone;
-  }
-  if (input.notes !== undefined) {
-    registration.notes = input.notes;
-  }
   registration.updated_at = nowIso();
 }
 
@@ -336,12 +312,6 @@ export async function createRegistration(formData: FormData) {
     full_name: extractText(formData, "full_name"),
     email: extractText(formData, "email"),
     phone: extractText(formData, "phone"),
-    organization: extractText(formData, "organization"),
-    job_title: extractText(formData, "job_title"),
-    dietary_restrictions: extractText(formData, "dietary_restrictions"),
-    emergency_contact_name: extractText(formData, "emergency_contact_name"),
-    emergency_contact_phone: extractText(formData, "emergency_contact_phone"),
-    notes: extractText(formData, "notes"),
     password: extractText(formData, "password")
   };
 
@@ -387,12 +357,12 @@ export async function createRegistration(formData: FormData) {
             ${input.full_name},
             ${input.email},
             ${input.phone},
-            ${input.organization},
-            ${input.job_title},
-            ${input.dietary_restrictions},
-            ${input.emergency_contact_name},
-            ${input.emergency_contact_phone},
-            ${input.notes},
+            ${""},
+            ${""},
+            ${""},
+            ${""},
+            ${""},
+            ${""},
             ${"submitted"},
             ${passwordHash},
             ${createdAt},

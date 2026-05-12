@@ -36,13 +36,7 @@ export default async function EditSubmissionPage() {
         initialValues={{
           full_name: registration.full_name,
           email: registration.email,
-          phone: registration.phone,
-          organization: registration.organization,
-          job_title: registration.job_title,
-          dietary_restrictions: registration.dietary_restrictions,
-          emergency_contact_name: registration.emergency_contact_name,
-          emergency_contact_phone: registration.emergency_contact_phone,
-          notes: registration.notes
+          phone: registration.phone
         }}
       />
       <DocumentList documents={registration.documents ?? []} />
