@@ -17,8 +17,12 @@ yarn-error.log*
 
 # Backend runtime data
 backend/data/
+.data/
 
 # Coverage / test output
 coverage/
 playwright-report/
 test-results/
+tsconfig.tsbuildinfo
+
+.docs

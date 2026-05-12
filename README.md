@@ -1,41 +1,37 @@
-# CMD AI Adoption Exam 2026 — Problem #4
+# Event Register App
 
-This is the lightest of the four problems. Ship it fast and ship it deployed.
+Single Next.js app for public registration, applicant self-service, admin review, API routes, and document/name-tag handling.
 
-## What to build
+## Run
 
-An event registration system.
+```bash
+npm install
+npm run dev
+```
 
-- Stack: **Next.js** or **Nest.js**, or **Go**. Choose from this not all.
-- One repo. User pages, admin pages, and API in the same project.
-- Tests. Pick what would matter if this were a real event with real people. Can be any kind of test written by code.
+Copy `.env.example` to `.env.local` if you want to override the defaults.
 
-User can:
-- Submit a registration form with name, email, phone, and any other fields a real event would ask for.
-- Upload multiple supporting documents.
-- Set a password at submission time.
-- Receive a reference code on submission.
-- Return with reference code and password to view their submission.
-- Edit any field, replace documents, add new documents.
+## Architecture
 
-Admin can:
-- Log in with username and password from `.env`.
-- See the list of all registrations.
-- Click any registration to see its details.
-- Download a name tag PDF for any registration.
+- One deployable app only: Next.js App Router at the repo root
+- User pages, admin pages, and backend logic live in the same app
+- Route handlers under `src/app/api/*` implement the server-side flows directly
+- Registration state currently uses an in-memory server-state seam inside the app
+- Uploaded files currently use an internal inline storage seam so the app no longer depends on a separate backend or writable local upload directory
 
-## Deployment
+## Relevant scripts
 
-- Deploy anywhere. Vercel, Railway, Fly, Render, your own VPS.
-- The senior opens the URL, submits a registration with files, comes back with the reference code, edits something, opens the admin page, and downloads a tag. If all of that works, you pass the URL check.
+```bash
+npm run test
+npm run lint
+npm run build
+```
 
-## What to deliver
+## Vercel note
 
-- The deployed URL.
-- The code, shown to the senior at your seat.
-- Tests.
+The code is shaped for a Vercel-only deployment model, but two production seams are still intentionally lightweight:
 
-## คำที่ต้องเข้าใจให้ตรงกัน
+- app state is currently kept in process memory rather than Postgres
+- uploaded files use an inline storage seam rather than a live Vercel Blob adapter
 
-- **Reference code** — รหัสที่ระบบให้ผู้ใช้หลังลงทะเบียน ใช้กลับเข้ามาแก้ไขได้
-- **Tag** — ป้ายชื่อผู้ลงทะเบียน (ในที่นี้คือ PDF ไม่ใช่กระดาษจริง)
+That keeps the app self-contained and buildable while leaving clean swap points for Postgres and Blob-backed runtime integration.
