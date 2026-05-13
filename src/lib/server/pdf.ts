@@ -4,13 +4,11 @@ function escapePdfText(value: string) {
 
 export function createNameTagPdf(input: {
   fullName: string;
-  organization: string;
   referenceCode: string;
 }) {
   const lines = [
     { size: 24, x: 32, y: 320, text: input.fullName || "Attendee" },
-    { size: 16, x: 32, y: 280, text: input.organization || "-" },
-    { size: 12, x: 32, y: 246, text: input.referenceCode }
+    { size: 12, x: 32, y: 280, text: input.referenceCode }
   ];
 
   const stream = lines

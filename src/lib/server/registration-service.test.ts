@@ -4,6 +4,7 @@ import assert from "node:assert/strict";
 import { getAdminSeed, getPostgresSslMode, getUploadLimits } from "./config.ts";
 import { generateReferenceCode } from "./reference-code.ts";
 import { AppError } from "./errors.ts";
+import { createNameTagPdf } from "./pdf.ts";
 import { storeUploadedFile } from "./storage.ts";
 
 test("reference codes keep the expected shape and avoid collisions in sample generation", () => {
@@ -74,4 +75,40 @@ test("hosted postgres defaults to SSL while localhost stays non-SSL", () => {
     process.env.POSTGRES_URL = previousUrl;
     process.env.POSTGRES_SSL_MODE = previousSslMode;
   }
+});
+
+test("name tag pdf no longer renders legacy organization text", () => {
+  const pdf = createNameTagPdf({
+    fullName: "Ada Lovelace",
+    referenceCode: "REG-20260513-ABCDE",
+    organization: "Legacy Org"
+  } as never);
+
+  const content = pdf.toString("utf8");
+  assert.match(content, /Ada Lovelace/);
+  assert.match(content, /REG-20260513-ABCDE/);
+  assert.equal(content.includes("Legacy Org"), false);
+});
+
+test("pending upload queue appends additional files and removes by id", async () => {
+  const { appendPendingUploads, removePendingUpload } = await import(
+    "../../features/registration/components/pending-upload-queue.ts"
+  );
+
+  const first = new File(["first"], "first.pdf", { type: "application/pdf" });
+  const second = new File(["second"], "second.pdf", { type: "application/pdf" });
+
+  const queued = appendPendingUploads([], [first], () => "doc-1");
+  const appended = appendPendingUploads(queued, [second], () => "doc-2");
+
+  assert.deepEqual(
+    appended.map((item) => item.file.name),
+    ["first.pdf", "second.pdf"]
+  );
+
+  const remaining = removePendingUpload(appended, "doc-1");
+  assert.deepEqual(
+    remaining.map((item) => item.file.name),
+    ["second.pdf"]
+  );
 });

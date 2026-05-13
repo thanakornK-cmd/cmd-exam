@@ -24,7 +24,7 @@ export default async function EditSubmissionPage() {
     <PageShell
       eyebrow="Edit submission"
       title="Update your registration"
-      description="Change fields, add new supporting documents, or replace an existing document without losing the old audit trail."
+      description="Change fields, add new documents, or replace an existing document without losing the old audit trail."
     >
       <div className="actions">
         <Link className="button button--secondary" href="/submission">

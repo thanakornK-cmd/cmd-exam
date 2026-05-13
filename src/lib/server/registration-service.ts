@@ -49,7 +49,16 @@ function publicDocument(document: StoredDocument): PublicDocument {
 }
 
 function publicRegistration(registration: RegistrationRecord): PublicRegistration {
-  const { password_hash: _passwordHash, ...rest } = registration;
+  const {
+    password_hash: _passwordHash,
+    organization: _organization,
+    job_title: _jobTitle,
+    dietary_restrictions: _dietaryRestrictions,
+    emergency_contact_name: _emergencyContactName,
+    emergency_contact_phone: _emergencyContactPhone,
+    notes: _notes,
+    ...rest
+  } = registration;
   return {
     ...rest,
     documents: registration.documents.map(publicDocument)
@@ -868,7 +877,6 @@ export async function downloadNameTag(token: string, registrationID: string) {
   return {
     buffer: createNameTagPdf({
       fullName: registration.full_name,
-      organization: registration.organization,
       referenceCode: registration.reference_code
     }),
     filename: `name-tag-${registration.reference_code}.pdf`

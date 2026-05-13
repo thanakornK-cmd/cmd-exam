@@ -23,22 +23,26 @@ type RegistrationFields = {
   full_name: string;
   email: string;
   phone: string;
+  status: string;
+  created_at: string;
+  updated_at: string;
+};
+
+type LegacyRegistrationFields = {
   organization: string;
   job_title: string;
   dietary_restrictions: string;
   emergency_contact_name: string;
   emergency_contact_phone: string;
   notes: string;
-  status: string;
-  created_at: string;
-  updated_at: string;
 };
 
 export type PublicRegistration = RegistrationFields & {
   documents: PublicDocument[];
 };
 
-export type RegistrationRecord = RegistrationFields & {
+export type RegistrationRecord = RegistrationFields &
+  LegacyRegistrationFields & {
   password_hash: string;
   documents: StoredDocument[];
 };

@@ -6,7 +6,7 @@ export default function RegisterPage() {
     <PageShell
       eyebrow="Public registration"
       title="Register for the event"
-      description="Submit your details, upload supporting documents, and keep your reference code to return later."
+      description="Submit your details, upload documents, and keep your reference code to return later."
     >
       <RegistrationForm />
     </PageShell>
