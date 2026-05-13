@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 
-import { getAdminSeed, getUploadLimits } from "./config.ts";
+import { getAdminSeed, getPostgresSslMode, getUploadLimits } from "./config.ts";
 import { generateReferenceCode } from "./reference-code.ts";
 import { AppError } from "./errors.ts";
 import { storeUploadedFile } from "./storage.ts";
@@ -53,5 +53,25 @@ test("upload storage enforces configured file size limits", async () => {
     });
   } finally {
     process.env.MAX_UPLOAD_BYTES = previousMaxUploadBytes;
+  }
+});
+
+test("hosted postgres defaults to SSL while localhost stays non-SSL", () => {
+  const previousUrl = process.env.POSTGRES_URL;
+  const previousSslMode = process.env.POSTGRES_SSL_MODE;
+
+  try {
+    delete process.env.POSTGRES_SSL_MODE;
+    process.env.POSTGRES_URL = "postgresql://user:pass@dpg-example.oregon-postgres.render.com/app";
+    assert.equal(getPostgresSslMode(), "require");
+
+    process.env.POSTGRES_URL = "postgresql://postgres:postgres@localhost:5432/event_register";
+    assert.equal(getPostgresSslMode(), "disable");
+
+    process.env.POSTGRES_SSL_MODE = "require";
+    assert.equal(getPostgresSslMode(), "require");
+  } finally {
+    process.env.POSTGRES_URL = previousUrl;
+    process.env.POSTGRES_SSL_MODE = previousSslMode;
   }
 });

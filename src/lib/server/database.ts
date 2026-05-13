@@ -3,7 +3,7 @@ import { randomUUID } from "node:crypto";
 import postgres from "postgres";
 
 import { hashPassword } from "./auth.ts";
-import { getAdminSeed, getPostgresUrl } from "./config.ts";
+import { getAdminSeed, getPostgresSslMode, getPostgresUrl } from "./config.ts";
 
 let client: ReturnType<typeof postgres> | null = null;
 
@@ -133,7 +133,8 @@ export function getSql() {
   if (!client) {
     client = postgres(getPostgresUrl(), {
       max: 1,
-      prepare: false
+      prepare: false,
+      ssl: getPostgresSslMode() === "require" ? "require" : undefined
     });
   }
 

@@ -1,6 +1,8 @@
 const DEFAULT_MAX_UPLOAD_BYTES = 5 * 1024 * 1024;
 const DEFAULT_MAX_UPLOAD_FILES = 5;
 
+export type PostgresSslMode = "disable" | "require";
+
 function currentEnvironment() {
   return process.env.NODE_ENV ?? "development";
 }
@@ -17,6 +19,24 @@ export function getPostgresUrl() {
   }
 
   throw new Error("POSTGRES_URL is required for the server runtime");
+}
+
+export function getPostgresSslMode(): PostgresSslMode {
+  const configuredMode = process.env.POSTGRES_SSL_MODE?.trim().toLowerCase();
+  if (configuredMode === "disable" || configuredMode === "require") {
+    return configuredMode;
+  }
+
+  const url = getPostgresUrl().toLowerCase();
+  if (url.includes("sslmode=disable")) {
+    return "disable";
+  }
+
+  if (url.includes("localhost") || url.includes("127.0.0.1")) {
+    return "disable";
+  }
+
+  return "require";
 }
 
 export function getUploadLimits() {

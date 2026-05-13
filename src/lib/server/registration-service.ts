@@ -114,10 +114,11 @@ function extractText(formData: FormData, name: string) {
   return typeof value === "string" ? value.trim() : "";
 }
 
-function collectUploadFiles(formData: FormData, fieldName: string) {
-  const files = formData
-    .getAll(fieldName)
-    .filter((value): value is File => value instanceof File && value.size > 0);
+function collectUploadFiles(formData: FormData, fieldNames: string | string[]) {
+  const names = Array.isArray(fieldNames) ? fieldNames : [fieldNames];
+  const files = names.flatMap((fieldName) =>
+    formData.getAll(fieldName).filter((value): value is File => value instanceof File && value.size > 0)
+  );
 
   const { maxUploadFiles } = getUploadLimits();
   if (files.length > maxUploadFiles) {
@@ -323,7 +324,9 @@ export async function createRegistration(formData: FormData) {
   const registrationID = randomUUID();
   const passwordHash = await hashPassword(input.password);
   const documents = await Promise.all(
-    collectUploadFiles(formData, "documents[]").map((file) => createDocumentRecord(registrationID, file))
+    collectUploadFiles(formData, ["documents[]", "documents"]).map((file) =>
+      createDocumentRecord(registrationID, file)
+    )
   );
   const sql = await database();
 
@@ -545,9 +548,9 @@ export async function updateApplicantRegistration(token: string, input: Registra
 
 export async function addApplicantDocuments(token: string, formData: FormData) {
   const session = await sessionForActor(token, "applicant");
-  const files = collectUploadFiles(formData, "documents[]");
+  const files = collectUploadFiles(formData, ["documents[]", "documents"]);
   if (files.length === 0) {
-    throw new AppError(400, "documents[] field is required");
+    throw new AppError(400, "documents field is required");
   }
 
   const registration = await getRegistrationRecordByID(session.actor_id);
